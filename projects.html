@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全部项目 — S@K3</title>
+  <meta name="description" content="S@K3 的全部项目——在读计算机研究生。">
+  <link rel="icon" href="assets/avatar.jpg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.0/lib/Normal/MiSans-Regular.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.0/lib/Normal/MiSans-Medium.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.0/lib/Normal/MiSans-Semibold.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.0/lib/Normal/MiSans-Bold.min.css">
+  <style>
+    :root {
+      --color-bg: #FFFFFF;
+      --color-bg-subtle: #F7F8FA;
+      --color-ink: #1A1A1A;
+      --color-ink-secondary: #86868B;
+      --color-border: #E5E5E7;
+      --color-border-hover: #1A1A1A;
+      --color-card-bg: #FFFFFF;
+      --color-nav-bg: rgba(255, 255, 255, 0.9);
+      --font-main: 'MiSans', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', sans-serif;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #0A0A0A;
+      --color-bg-subtle: #141414;
+      --color-ink: #F5F5F7;
+      --color-ink-secondary: #86868B;
+      --color-border: #2C2C2E;
+      --color-border-hover: #F5F5F7;
+      --color-card-bg: #1C1C1E;
+      --color-nav-bg: rgba(10, 10, 10, 0.9);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; font-size: 16px; cursor: none; }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--color-ink);
+      background: var(--color-bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--color-ink); color: var(--color-bg); }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; cursor: none; }
+    button { cursor: none; }
+
+    /* Cursor */
+    .cursor-ring {
+      position: fixed; top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(26, 26, 26, 0.4);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transition: width 0.25s cubic-bezier(0.23,1,0.32,1), height 0.25s cubic-bezier(0.23,1,0.32,1), border-color 0.25s ease, background 0.25s ease;
+      transform: translate(-50%,-50%);
+    }
+    .cursor-dot {
+      position: fixed; top: 0; left: 0;
+      width: 6px; height: 6px; background: #1A1A1A;
+      border-radius: 50%; pointer-events: none; z-index: 10000;
+      transform: translate(-50%,-50%);
+    }
+    .cursor-ring.hover { width: 56px; height: 56px; border-color: rgba(26,26,26,0.6); background: rgba(26,26,26,0.04); }
+    .cursor-ring.pressed { width: 28px; height: 28px; border-color: rgba(26,26,26,0.8); }
+    [data-theme="dark"] .cursor-ring { border-color: rgba(245,245,247,0.35); }
+    [data-theme="dark"] .cursor-dot { background: #F5F5F7; }
+    [data-theme="dark"] .cursor-ring.hover { border-color: rgba(245,245,247,0.5); background: rgba(245,245,247,0.05); }
+    @media (hover: none), (max-width: 768px) {
+      .cursor-ring, .cursor-dot { display: none !important; }
+      html, a, button { cursor: auto !important; }
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+    /* Nav */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 40px; height: 60px;
+      background: var(--color-nav-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--color-border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav__logo { font-size: 17px; font-weight: 700; }
+    .nav__right { display: flex; align-items: center; gap: 28px; }
+    .nav__links { display: flex; gap: 28px; align-items: center; list-style: none; }
+    .nav__links a {
+      font-size: 14px; font-weight: 500; color: var(--color-ink-secondary);
+      transition: color 0.2s ease; line-height: 60px; display: inline-block;
+    }
+    .nav__links a:hover, .nav__links a.active { color: var(--color-ink); }
+    .theme-toggle {
+      background: none; border: 1.5px solid var(--color-border);
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--color-ink);
+      transition: border-color 0.2s ease, transform 0.3s ease;
+    }
+    .theme-toggle:hover { border-color: var(--color-ink); transform: rotate(30deg); }
+
+    /* Page header */
+    .page-head { padding: 140px 0 48px; }
+    .page-head h1 {
+      font-size: 44px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .page-head p { font-size: 16px; color: var(--color-ink-secondary); }
+
+    /* Filters */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px;
+    }
+    .filter-btn {
+      font-family: var(--font-main);
+      font-size: 14px; font-weight: 500;
+      color: var(--color-ink-secondary);
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 999px; padding: 8px 22px;
+      transition: all 0.2s ease;
+    }
+    .filter-btn:hover { border-color: var(--color-ink); color: var(--color-ink); }
+    .filter-btn.active {
+      background: var(--color-ink); color: var(--color-bg);
+      border-color: var(--color-ink);
+    }
+    [data-theme="dark"] .filter-btn.active { color: var(--color-bg); }
+
+    /* Grid */
+    .grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      padding-bottom: 120px;
+    }
+    .card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 32px; background: var(--color-card-bg);
+      display: flex; flex-direction: column;
+      transition: border-color 0.25s ease, transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+    }
+    .card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
+    .card.hidden { display: none; }
+    .card__media {
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--color-bg-subtle);
+      border-radius: var(--radius-sm); margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; border: 1px dashed var(--color-border);
+    }
+    .card__media img { max-width: 76px; max-height: 76px; object-fit: contain; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); }
+    .card:hover .card__media img { transform: scale(1.1); }
+    .card__media--text { font-family: 'Kaiti SC','STKaiti',KaiTi,serif; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.12em; color: var(--color-ink); }
+    .card__meta { font-size: 12px; font-weight: 500; color: var(--color-ink-secondary); margin-bottom: 8px; }
+    .card__title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .card__desc { font-size: 13.5px; color: var(--color-ink-secondary); line-height: 1.7; flex: 1; margin-bottom: 20px; }
+    .card__link {
+      font-size: 14px; font-weight: 600; color: var(--color-ink);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .card__link:hover { opacity: 0.7; }
+
+    .empty {
+      display: none; text-align: center; padding: 80px 0;
+      color: var(--color-ink-secondary); font-size: 15px;
+      grid-column: 1 / -1;
+    }
+
+    /* Footer */
+    .footer { border-top: 1px solid var(--color-border); padding: 32px 0; }
+    .footer__inner { display: flex; justify-content: space-between; align-items: center; }
+    .footer__text { font-size: 13px; color: var(--color-ink-secondary); }
+    .footer__top {
+      font-size: 13px; font-weight: 500; color: var(--color-ink-secondary);
+      background: none; border: 1px solid var(--color-border);
+      padding: 6px 16px; border-radius: 999px; font-family: var(--font-main);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .footer__top:hover { border-color: var(--color-ink); color: var(--color-ink); }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.23,1,0.32,1), transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 1024px) { .grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .nav { padding: 0 20px; }
+      .nav__links { display: none; }
+      .page-head { padding: 110px 0 40px; }
+      .page-head h1 { font-size: 32px; }
+      .grid { grid-template-columns: 1fr; padding-bottom: 64px; }
+      .cursor-ring, .cursor-dot { display: none !important; }
+      html, a, button { cursor: auto !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">S@K3</a>
+    <div class="nav__right">
+      <ul class="nav__links">
+        <li><a href="index.html#news">动态</a></li>
+        <li><a href="index.html#featured">精选</a></li>
+        <li><a href="index.html#matrix">项目</a></li>
+        <li><a href="projects.html" class="active">全部项目</a></li>
+        <li><a href="index.html#about">关于</a></li>
+        <li><a href="index.html#contact">联系</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
+        <span id="themeIcon">◐</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page head -->
+  <header class="page-head container">
+    <h1 class="reveal">全部项目</h1>
+    <p class="reveal reveal-delay-1">每一个都是解决真实问题的尝试，持续增加中。</p>
+  </header>
+
+  <!-- Filters -->
+  <div class="container">
+    <div class="filters reveal" id="filters">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      <button class="filter-btn" data-filter="tool">工具</button>
+      <button class="filter-btn" data-filter="web">网站</button>
+      <button class="filter-btn" data-filter="ai">AI</button>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <main class="container">
+    <div class="grid" id="grid">
+      <div class="card reveal" data-category="tool">
+        <div class="card__media"><img src="https://raw.githubusercontent.com/tau625/ShudaoLe/main/assets/app.png" alt="ShudaoLe"></div>
+        <p class="card__meta">Python · 桌面工具 · Windows</p>
+        <h3 class="card__title">ShudaoLe 书到了</h3>
+        <p class="card__desc">中小学教材一键下载工具。对接国家智慧教育平台，支持 PDF 预览与批量下载，PyInstaller 打包为 Windows 可执行文件，开箱即用。</p>
+        <a href="https://github.com/tau625/ShudaoLe" target="_blank" rel="noopener" class="card__link">GitHub →</a>
+      </div>
+
+      <div class="card reveal" data-category="tool">
+        <div class="card__media"><img src="https://raw.githubusercontent.com/tau625/BiliBatch/main/extension/icons/icon128.png" alt="BiliBatch"></div>
+        <p class="card__meta">JavaScript · 浏览器扩展</p>
+        <h3 class="card__title">BiliBatch 批哩批哩</h3>
+        <p class="card__desc">一键将 B 站多分P视频字幕批量导入 Obsidian。解析网页字幕数据，自动整理为 Markdown 笔记，省去手动逐个复制的麻烦。</p>
+        <a href="https://github.com/tau625/BiliBatch" target="_blank" rel="noopener" class="card__link">GitHub →</a>
+      </div>
+
+      <div class="card reveal" data-category="ai">
+        <div class="card__media card__media--text">展卷</div>
+        <p class="card__meta">Python · AI 流水线</p>
+        <h3 class="card__title">Showreel</h3>
+        <p class="card__desc">用代码写视频——给软件做宣传片的完整 AI 流水线。Remotion 渲染、edge-tts 配音、词级字幕、倍速交付，从分镜到 GitHub README 内嵌播放器一站式。</p>
+        <a href="https://github.com/tau625/Showreel" target="_blank" rel="noopener" class="card__link">GitHub →</a>
+      </div>
+
+      <div class="card reveal" data-category="web">
+        <div class="card__media card__media--text">所 见 即 所 得</div>
+        <p class="card__meta">HTML/CSS/JS · 网站</p>
+        <h3 class="card__title">个人作品集</h3>
+        <p class="card__desc">你正在看的这个网站。MiMo 风格设计语言，MiSans 字体，纯 HTML/CSS/JS 实现，GitHub Pages 部署，支持暗色模式与自定义鼠标。</p>
+        <a href="https://github.com/tau625/portfolio" target="_blank" rel="noopener" class="card__link">GitHub →</a>
+      </div>
+
+      <p class="empty" id="empty">该分类下暂时没有项目</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__text">© 2025 S@K3 · 在读计算机研究生</p>
+      <button class="footer__top" onclick="window.scrollTo({top:0})">↑ 回到顶部</button>
+    </div>
+  </footer>
+
+  <script>
+    /* Cursor */
+    (function () {
+      if (window.matchMedia('(hover: none)').matches) return;
+      if (window.matchMedia('(max-width: 768px)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var ring = document.getElementById('cursorRing');
+      var dot = document.getElementById('cursorDot');
+      var mx = 0, my = 0, rx = 0, ry = 0;
+
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+      });
+
+      (function loop() {
+        rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(loop);
+      })();
+
+      document.querySelectorAll('a, button, .card, .filter-btn').forEach(function (el) {
+        el.addEventListener('mouseenter', function () { ring.classList.add('hover'); });
+        el.addEventListener('mouseleave', function () { ring.classList.remove('hover'); });
+      });
+      document.addEventListener('mousedown', function () { ring.classList.add('pressed'); });
+      document.addEventListener('mouseup', function () { ring.classList.remove('pressed'); });
+    })();
+
+    /* Reveal */
+    (function () {
+      var reveals = document.querySelectorAll('.reveal');
+      if (!reveals.length) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        reveals.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function (el) { obs.observe(el); });
+    })();
+
+    /* Filters */
+    (function () {
+      var btns = document.querySelectorAll('.filter-btn');
+      var cards = document.querySelectorAll('.card');
+      var empty = document.getElementById('empty');
+
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          btns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var filter = btn.dataset.filter;
+          var visible = 0;
+          cards.forEach(function (card) {
+            var show = filter === 'all' || card.dataset.category === filter;
+            card.classList.toggle('hidden', !show);
+            if (show) {
+              visible++;
+              card.classList.remove('visible');
+              void card.offsetWidth; // re-trigger animation
+              card.classList.add('visible');
+            }
+          });
+          empty.style.display = visible === 0 ? 'block' : 'none';
+        });
+      });
+    })();
+
+    /* Dark mode */
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById('themeToggle');
+      var icon = document.getElementById('themeIcon');
+      var stored = localStorage.getItem('theme');
+
+      function apply(t) {
+        root.setAttribute('data-theme', t);
+        icon.textContent = t === 'dark' ? '☀' : '◐';
+      }
+      if (stored) apply(stored);
+      toggle.addEventListener('click', function () {
+        var cur = root.getAttribute('data-theme');
+        var next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark' :
+          window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark';
+        apply(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+
+</body>
+</html>
