@@ -540,12 +540,125 @@
       aspect-ratio: 1;
       background: var(--color-bg);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
-      color: var(--color-ink-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doraemon {
+      width: 200px;
+      height: 200px;
+      position: relative;
+    }
+
+    .doraemon__head {
+      width: 180px;
+      height: 170px;
+      background: #0097E6;
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      overflow: hidden;
+    }
+
+    .doraemon__face {
+      width: 150px;
+      height: 130px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .doraemon__eye {
+      width: 36px;
+      height: 40px;
+      background: #FFFFFF;
+      border: 2px solid #333;
+      border-radius: 50%;
+      position: absolute;
+      top: 30px;
+    }
+
+    .doraemon__eye--left { left: 50px; }
+    .doraemon__eye--right { left: 94px; }
+
+    .doraemon__pupil {
+      width: 12px;
+      height: 14px;
+      background: #333;
+      border-radius: 50%;
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+
+    .doraemon__nose {
+      width: 18px;
+      height: 18px;
+      background: #E74C3C;
+      border-radius: 50%;
+      position: absolute;
+      top: 62px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #333;
+    }
+
+    .doraemon__mouth {
+      width: 80px;
+      height: 40px;
+      border-bottom: 3px solid #333;
+      border-radius: 0 0 50% 50%;
+      position: absolute;
+      top: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .doraemon__whisker {
+      width: 40px;
+      height: 2px;
+      background: #333;
+      position: absolute;
+      top: 80px;
+    }
+
+    .doraemon__whisker--l1 { left: 10px; transform: rotate(-10deg); }
+    .doraemon__whisker--l2 { left: 8px; top: 90px; }
+    .doraemon__whisker--l3 { left: 10px; top: 100px; transform: rotate(10deg); }
+    .doraemon__whisker--r1 { right: 10px; transform: rotate(10deg); }
+    .doraemon__whisker--r2 { right: 8px; top: 90px; }
+    .doraemon__whisker--r3 { right: 10px; top: 100px; transform: rotate(-10deg); }
+
+    .doraemon__bell {
+      width: 22px;
+      height: 22px;
+      background: #F1C40F;
+      border-radius: 50%;
+      position: absolute;
+      top: 168px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #333;
+    }
+
+    .doraemon__bell::after {
+      content: '';
+      width: 8px;
+      height: 3px;
+      background: #333;
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
     }
 
     /* ========================================
@@ -768,7 +881,24 @@
           </div>
         </div>
         <div class="about__visual reveal">
-          <div class="about__illustration">[个人照片或插画]</div>
+          <div class="about__illustration">
+            <div class="doraemon">
+              <div class="doraemon__head">
+                <div class="doraemon__face"></div>
+                <div class="doraemon__eye doraemon__eye--left"><div class="doraemon__pupil"></div></div>
+                <div class="doraemon__eye doraemon__eye--right"><div class="doraemon__pupil"></div></div>
+                <div class="doraemon__nose"></div>
+                <div class="doraemon__mouth"></div>
+                <div class="doraemon__whisker doraemon__whisker--l1"></div>
+                <div class="doraemon__whisker doraemon__whisker--l2"></div>
+                <div class="doraemon__whisker doraemon__whisker--l3"></div>
+                <div class="doraemon__whisker doraemon__whisker--r1"></div>
+                <div class="doraemon__whisker doraemon__whisker--r2"></div>
+                <div class="doraemon__whisker doraemon__whisker--r3"></div>
+              </div>
+              <div class="doraemon__bell"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
