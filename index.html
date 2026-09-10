@@ -8,20 +8,22 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>✦</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ========================================
-       Design Tokens — MiMo-inspired clean
+       Design Tokens
        ======================================== */
     :root {
       --color-bg: #FFFFFF;
-      --color-bg-subtle: #F7F8FA;
+      --color-bg-subtle: #F5F5F5;
       --color-ink: #1A1A1A;
-      --color-ink-secondary: #666666;
-      --color-border: #E0E0E0;
+      --color-ink-secondary: #888888;
+      --color-border: #E8E8E8;
       --color-border-hover: #1A1A1A;
       --color-accent: #1A1A1A;
-      --color-accent-soft: rgba(26, 26, 26, 0.06);
+      --color-accent-soft: rgba(26, 26, 26, 0.05);
+      --color-card-bg: #FFFFFF;
+      --color-nav-bg: rgba(255, 255, 255, 0.88);
 
       --font-main: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -41,6 +43,19 @@
       --radius-sm: 8px;
     }
 
+    [data-theme="dark"] {
+      --color-bg: #0A0A0A;
+      --color-bg-subtle: #141414;
+      --color-ink: #F2F2F2;
+      --color-ink-secondary: #888888;
+      --color-border: #222222;
+      --color-border-hover: #F2F2F2;
+      --color-accent: #F2F2F2;
+      --color-accent-soft: rgba(242, 242, 242, 0.06);
+      --color-card-bg: #141414;
+      --color-nav-bg: rgba(10, 10, 10, 0.88);
+    }
+
     /* ========================================
        Reset
        ======================================== */
@@ -53,6 +68,7 @@
     html {
       scroll-behavior: smooth;
       font-size: 16px;
+      cursor: none;
     }
 
     body {
@@ -61,11 +77,12 @@
       background: var(--color-bg);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     ::selection {
       background: var(--color-ink);
-      color: #fff;
+      color: var(--color-bg);
     }
 
     img { display: block; max-width: 100%; }
@@ -73,6 +90,64 @@
     a {
       color: inherit;
       text-decoration: none;
+      cursor: none;
+    }
+
+    button { cursor: none; }
+
+    /* ========================================
+       Custom cursor
+       ======================================== */
+    .cursor-outer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--color-ink);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                  height 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                  border-color 0.3s ease,
+                  background 0.3s ease;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      background: var(--color-ink);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+
+    .cursor-outer.hovering {
+      width: 64px;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .cursor-outer.clicking {
+      width: 32px;
+      height: 32px;
+    }
+
+    @media (hover: none) {
+      .cursor-outer, .cursor-dot { display: none; }
+      html, a, button { cursor: auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cursor-outer { transition: none; }
     }
 
     /* ========================================
@@ -95,7 +170,7 @@
       z-index: 100;
       padding: 0 var(--sp-4);
       height: 64px;
-      background: rgba(255, 255, 255, 0.92);
+      background: var(--color-nav-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--color-border);
@@ -105,9 +180,9 @@
     }
 
     .nav__logo {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
     }
 
     .nav__links {
@@ -134,16 +209,34 @@
       gap: 6px;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #fff;
+      color: var(--color-bg);
       background: var(--color-ink);
       padding: 10px 22px;
       border-radius: 999px;
       border: none;
-      cursor: pointer;
-      transition: opacity 200ms ease;
+      transition: opacity 200ms ease, transform 200ms ease;
     }
 
-    .nav__cta:hover { opacity: 0.85; }
+    .nav__cta:hover { opacity: 0.8; }
+
+    .theme-toggle {
+      background: none;
+      border: 1.5px solid var(--color-border);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 200ms ease, transform 200ms ease;
+      font-size: 0.95rem;
+      color: var(--color-ink);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--color-ink);
+      transform: rotate(30deg);
+    }
 
     /* ========================================
        Hero
@@ -164,24 +257,28 @@
     }
 
     .hero__greeting {
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.03em;
+      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
       margin-bottom: var(--sp-3);
     }
 
-    .hero__greeting .accent {
+    .hero__accent {
       display: inline-block;
       margin-left: 12px;
+      color: var(--color-ink);
+      opacity: 0.15;
+      font-size: 0.7em;
     }
 
     .hero__tagline {
-      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
       font-weight: 400;
       color: var(--color-ink-secondary);
       margin-bottom: var(--sp-6);
-      line-height: 1.5;
+      line-height: 1.6;
+      max-width: 520px;
     }
 
     .hero__actions {
@@ -200,17 +297,17 @@
       padding: 14px 32px;
       border-radius: 999px;
       border: none;
-      cursor: pointer;
-      transition: all 200ms ease;
+      transition: all 250ms cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .btn--primary {
       background: var(--color-ink);
-      color: #fff;
+      color: var(--color-bg);
     }
 
     .btn--primary:hover {
-      opacity: 0.85;
+      opacity: 0.8;
+      transform: scale(1.03);
     }
 
     .btn--outline {
@@ -221,10 +318,11 @@
 
     .btn--outline:hover {
       border-color: var(--color-ink);
+      transform: scale(1.03);
     }
 
     /* ========================================
-       Floating decorations
+       Floating tags
        ======================================== */
     .float-tag {
       position: absolute;
@@ -236,43 +334,43 @@
       pointer-events: none;
       z-index: 1;
       opacity: 0;
-      animation: floatIn 0.8s ease forwards;
+      animation: floatIn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     }
 
     .float-tag--1 {
       background: var(--color-ink);
-      color: #fff;
-      top: 28%;
-      right: 28%;
-      animation-delay: 0.3s;
+      color: var(--color-bg);
+      top: 26%;
+      right: 26%;
+      animation-delay: 0.4s;
     }
 
     .float-tag--2 {
       background: #FFF3E0;
       color: #E65100;
-      top: 48%;
-      right: 12%;
-      animation-delay: 0.6s;
+      top: 46%;
+      right: 10%;
+      animation-delay: 0.7s;
     }
 
     .float-tag--3 {
       background: #E8F5E9;
       color: #1B5E20;
-      bottom: 22%;
-      right: 22%;
-      animation-delay: 0.9s;
+      bottom: 20%;
+      right: 20%;
+      animation-delay: 1.0s;
     }
 
     .float-tag--4 {
       background: #F3E5F5;
       color: #4A148C;
-      top: 18%;
-      right: 8%;
-      animation-delay: 1.2s;
+      top: 16%;
+      right: 6%;
+      animation-delay: 1.3s;
     }
 
     @keyframes floatIn {
-      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      from { opacity: 0; transform: translateY(12px) scale(0.9); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
@@ -284,14 +382,14 @@
        Section label
        ======================================== */
     .section-label {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       margin-bottom: var(--sp-8);
     }
 
     /* ========================================
-       Works grid (2×2 MiMo style)
+       Works grid
        ======================================== */
     .works {
       padding: var(--sp-16) 0;
@@ -310,48 +408,54 @@
       padding: var(--sp-5);
       display: flex;
       flex-direction: column;
-      transition: border-color 200ms ease, transform 200ms ease;
-      min-height: 280px;
+      transition: border-color 300ms ease, transform 300ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 300ms ease;
+      min-height: 300px;
+      background: var(--color-card-bg);
     }
 
     .work-card:hover {
       border-color: var(--color-border-hover);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="dark"] .work-card:hover {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     }
 
     .work-card__title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: -0.01em;
       margin-bottom: var(--sp-2);
     }
 
     .work-card__desc {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--color-ink-secondary);
-      line-height: 1.65;
+      line-height: 1.7;
       flex: 1;
       margin-bottom: var(--sp-4);
     }
 
     .work-card__action {
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      font-family: var(--font-main);
       font-size: 0.85rem;
       font-weight: 600;
-      color: #fff;
+      color: var(--color-bg);
       background: var(--color-ink);
-      padding: 12px 0;
+      padding: 14px 0;
       border-radius: var(--radius-sm);
       border: none;
-      cursor: pointer;
       width: 100%;
-      justify-content: center;
-      transition: opacity 200ms ease;
+      transition: opacity 200ms ease, transform 200ms ease;
     }
 
-    .work-card__action:hover { opacity: 0.85; }
+    .work-card__action:hover { opacity: 0.8; transform: scale(1.01); }
 
     .work-card__placeholder {
       width: 100%;
@@ -368,7 +472,7 @@
     }
 
     /* ========================================
-       About section
+       About
        ======================================== */
     .about {
       padding: var(--sp-16) 0;
@@ -385,7 +489,7 @@
     .about__text {
       font-size: 1.05rem;
       color: var(--color-ink-secondary);
-      line-height: 1.8;
+      line-height: 1.85;
       margin-bottom: var(--sp-6);
     }
 
@@ -403,11 +507,12 @@
       border: 1px solid var(--color-border);
       padding: 8px 20px;
       border-radius: 999px;
-      transition: border-color 200ms ease;
+      transition: border-color 200ms ease, transform 200ms ease;
     }
 
     .skill-tag:hover {
       border-color: var(--color-ink);
+      transform: scale(1.05);
     }
 
     .about__visual {
@@ -427,10 +532,11 @@
       align-items: center;
       justify-content: center;
       font-size: 3rem;
+      color: var(--color-ink-secondary);
     }
 
     /* ========================================
-       Contact section
+       Contact
        ======================================== */
     .contact {
       padding: var(--sp-16) 0;
@@ -466,12 +572,13 @@
       padding: 12px 28px;
       border: 1.5px solid var(--color-border);
       border-radius: 999px;
-      transition: border-color 200ms ease, background 200ms ease;
+      transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
     }
 
     .contact__link:hover {
       border-color: var(--color-ink);
       background: var(--color-accent-soft);
+      transform: scale(1.03);
     }
 
     /* ========================================
@@ -501,14 +608,14 @@
       border: 1px solid var(--color-border);
       padding: 6px 16px;
       border-radius: 999px;
-      cursor: pointer;
-      transition: border-color 200ms ease, color 200ms ease;
       font-family: var(--font-main);
+      transition: border-color 200ms ease, color 200ms ease, transform 200ms ease;
     }
 
     .footer__top:hover {
       border-color: var(--color-ink);
       color: var(--color-ink);
+      transform: scale(1.05);
     }
 
     /* ========================================
@@ -516,8 +623,9 @@
        ======================================== */
     .reveal {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 800ms ease-out, transform 800ms ease-out;
+      transform: translateY(24px);
+      transition: opacity 900ms cubic-bezier(0.23, 1, 0.32, 1),
+                  transform 900ms cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .reveal.visible {
@@ -527,6 +635,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
+      .cursor-outer, .cursor-dot { display: none; }
+      html, a, button { cursor: auto; }
       html { scroll-behavior: auto; }
     }
 
@@ -535,35 +645,23 @@
        ======================================== */
     @media (max-width: 768px) {
       .nav__links { display: none; }
-
-      .hero {
-        min-height: 85vh;
-        padding-top: 100px;
-      }
-
+      .hero { min-height: 85vh; padding-top: 100px; }
       .float-tag { display: none; }
-
-      .works__grid {
-        grid-template-columns: 1fr;
-      }
-
-      .about__inner {
-        grid-template-columns: 1fr;
-      }
-
+      .works__grid { grid-template-columns: 1fr; }
+      .about__inner { grid-template-columns: 1fr; }
       .about__visual { display: none; }
-
-      .section-label { font-size: 1.6rem; }
-
-      .footer__inner {
-        flex-direction: column;
-        gap: var(--sp-2);
-        text-align: center;
-      }
+      .section-label { font-size: 1.5rem; }
+      .footer__inner { flex-direction: column; gap: var(--sp-2); text-align: center; }
+      .cursor-outer, .cursor-dot { display: none; }
+      html, a, button { cursor: auto; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Custom cursor -->
+  <div class="cursor-outer" id="cursorOuter"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
 
   <!-- Navigation -->
   <nav class="nav">
@@ -573,12 +671,16 @@
       <li><a href="#about">关于</a></li>
       <li><a href="#contact">联系</a></li>
       <li><a href="#contact" class="nav__cta">获取简历 →</a></li>
+      <li>
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
+          <span id="themeIcon">◐</span>
+        </button>
+      </li>
     </ul>
   </nav>
 
   <!-- Hero -->
   <section class="hero container">
-    <!-- Floating tags (MiMo style) -->
     <div class="float-tag float-tag--1">探索新世界</div>
     <div class="float-tag float-tag--2">创造新价值</div>
     <div class="float-tag float-tag--3">解决真问题</div>
@@ -586,7 +688,7 @@
 
     <div class="hero__content">
       <h1 class="hero__greeting">
-        你好，我是你的名字<span class="accent">✦</span>
+        你好，我是你的名字<span class="hero__accent">✦</span>
       </h1>
       <p class="hero__tagline">
         [一句话定位语]——在这里描述你做什么、擅长什么。
@@ -602,41 +704,29 @@
   <section id="works" class="works">
     <div class="container">
       <h2 class="section-label reveal">代表作品</h2>
-
       <div class="works__grid">
         <div class="work-card reveal">
           <div class="work-card__placeholder">[作品一截图 · 16:9]</div>
           <h3 class="work-card__title">[作品名称]</h3>
-          <p class="work-card__desc">
-            [简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]
-          </p>
+          <p class="work-card__desc">[简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]</p>
           <button class="work-card__action">查看详情 →</button>
         </div>
-
         <div class="work-card reveal">
           <div class="work-card__placeholder">[作品二截图 · 16:9]</div>
           <h3 class="work-card__title">[作品名称]</h3>
-          <p class="work-card__desc">
-            [简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]
-          </p>
+          <p class="work-card__desc">[简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]</p>
           <button class="work-card__action">查看详情 →</button>
         </div>
-
         <div class="work-card reveal">
           <div class="work-card__placeholder">[作品三截图 · 16:9]</div>
           <h3 class="work-card__title">[作品名称]</h3>
-          <p class="work-card__desc">
-            [简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]
-          </p>
+          <p class="work-card__desc">[简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]</p>
           <button class="work-card__action">查看详情 →</button>
         </div>
-
         <div class="work-card reveal">
           <div class="work-card__placeholder">[作品四截图 · 16:9]</div>
           <h3 class="work-card__title">[作品名称]</h3>
-          <p class="work-card__desc">
-            [简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]
-          </p>
+          <p class="work-card__desc">[简要描述这个作品：你做了什么、解决了什么问题、用了什么技术或方法、成果如何。]</p>
           <button class="work-card__action">查看详情 →</button>
         </div>
       </div>
@@ -647,12 +737,9 @@
   <section id="about" class="about">
     <div class="container">
       <h2 class="section-label reveal">关于我</h2>
-
       <div class="about__inner">
         <div class="about__left reveal">
-          <p class="about__text">
-            [在这里写一段简短的自我介绍，约 2~4 句话。说明你的专业领域、工作经历中最值得提及的部分、你关注的问题或方向。语气真诚，不要空泛。]
-          </p>
+          <p class="about__text">[在这里写一段简短的自我介绍，约 2~4 句话。说明你的专业领域、工作经历中最值得提及的部分、你关注的问题或方向。语气真诚，不要空泛。]</p>
           <div class="about__skills">
             <span class="skill-tag">[技能一]</span>
             <span class="skill-tag">[技能二]</span>
@@ -673,9 +760,7 @@
   <section id="contact" class="contact">
     <div class="container reveal">
       <h2 class="contact__title">想聊聊？</h2>
-      <p class="contact__text">
-        无论是合作机会还是项目咨询，欢迎通过以下方式联系我。
-      </p>
+      <p class="contact__text">无论是合作机会还是项目咨询，欢迎通过以下方式联系我。</p>
       <div class="contact__links">
         <a href="mailto:your@email.com" class="contact__link">✉ Email</a>
         <a href="https://github.com/你的用户名" class="contact__link" target="_blank" rel="noopener">⟡ GitHub</a>
@@ -692,8 +777,46 @@
     </div>
   </footer>
 
-  <!-- Scroll reveal -->
   <script>
+    /* ====== Custom cursor ====== */
+    (function () {
+      if (window.matchMedia('(hover: none)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var outer = document.getElementById('cursorOuter');
+      var dot = document.getElementById('cursorDot');
+      var mouseX = 0, mouseY = 0;
+      var outerX = 0, outerY = 0;
+
+      document.addEventListener('mousemove', function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.left = mouseX + 'px';
+        dot.style.top = mouseY + 'px';
+      });
+
+      function animateOuter() {
+        outerX += (mouseX - outerX) * 0.15;
+        outerY += (mouseY - outerY) * 0.15;
+        outer.style.left = outerX + 'px';
+        outer.style.top = outerY + 'px';
+        requestAnimationFrame(animateOuter);
+      }
+      animateOuter();
+
+      // Hover effect on interactive elements
+      var targets = document.querySelectorAll('a, button, .work-card, .skill-tag, .contact__link');
+      targets.forEach(function (el) {
+        el.addEventListener('mouseenter', function () { outer.classList.add('hovering'); });
+        el.addEventListener('mouseleave', function () { outer.classList.remove('hovering'); });
+      });
+
+      // Click scale effect
+      document.addEventListener('mousedown', function () { outer.classList.add('clicking'); });
+      document.addEventListener('mouseup', function () { outer.classList.remove('clicking'); });
+    })();
+
+    /* ====== Scroll reveal ====== */
     (function () {
       var reveals = document.querySelectorAll('.reveal');
       if (!reveals.length) return;
@@ -710,6 +833,37 @@
         });
       }, { threshold: 0.1 });
       reveals.forEach(function (el) { observer.observe(el); });
+    })();
+
+    /* ====== Dark mode ====== */
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById('themeToggle');
+      var icon = document.getElementById('themeIcon');
+      var stored = localStorage.getItem('theme');
+
+      function apply(theme) {
+        root.setAttribute('data-theme', theme);
+        icon.textContent = theme === 'dark' ? '☀' : '◐';
+      }
+
+      if (stored) {
+        apply(stored);
+      }
+
+      toggle.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme');
+        var next;
+        if (current === 'dark') {
+          next = 'light';
+        } else if (current === 'light') {
+          next = 'dark';
+        } else {
+          next = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark';
+        }
+        apply(next);
+        localStorage.setItem('theme', next);
+      });
     })();
   </script>
 
