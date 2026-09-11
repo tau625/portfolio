@@ -99,14 +99,6 @@
       transition: color 0.2s ease; line-height: 60px; display: inline-block;
     }
     .nav__links a:hover, .nav__links a.active { color: var(--color-ink); }
-    .nav__cta {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 14px; font-weight: 600; color: #fff;
-      background: var(--color-ink); padding: 8px 20px;
-      border-radius: 999px; border: none; transition: opacity 0.2s ease;
-    }
-    [data-theme="dark"] .nav__cta { color: var(--color-bg); }
-    .nav__cta:hover { opacity: 0.8; }
     .theme-toggle {
       background: none; border: 1.5px solid var(--color-border);
       width: 34px; height: 34px; border-radius: 50%;
@@ -229,12 +221,13 @@
     <a href="index.html" class="nav__logo">S@K3</a>
     <div class="nav__right">
       <ul class="nav__links">
-        <li><a href="index.html#stories">故事</a></li>
+        <li><a href="index.html#news">动态</a></li>
+        <li><a href="index.html#featured">精选</a></li>
+        <li><a href="index.html#matrix">项目</a></li>
         <li><a href="projects.html" class="active">全部项目</a></li>
         <li><a href="index.html#about">关于</a></li>
         <li><a href="index.html#contact">联系</a></li>
       </ul>
-      <a href="index.html#contact" class="nav__cta">获取简历 →</a>
       <button class="theme-toggle" id="themeToggle" aria-label="切换深色模式">
         <span id="themeIcon">◐</span>
       </button>
